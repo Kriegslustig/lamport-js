@@ -1,7 +1,7 @@
 {
   "name": "lamport-js",
   "version": "0.1.0",
-  "description": "Pure JS implementation of the Lamport one-time signature scheme",
+  "description": "Browser implementation of the Lamport one-time signature scheme",
   "main": "dist/main.js",
   "module": "dist/main.mjs",
   "scripts": {
