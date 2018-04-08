@@ -1,0 +1,16 @@
+{
+  "presets": [
+    "flow",
+    ["env", {
+      "modules": false,
+      "useBuiltIns": "usage"
+    }]
+  ],
+  "env": {
+    "test": {
+      "presets": [
+        ["env"]
+      ]
+    },
+  }
+}

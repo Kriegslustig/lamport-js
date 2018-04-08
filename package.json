@@ -1,0 +1,38 @@
+{
+  "name": "lamport-js",
+  "version": "0.1.0",
+  "description": "Pure JS implementation of the Lamport one-time signature scheme",
+  "main": "dist/main.js",
+  "module": "dist/main.mjs",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "npm run test -- --watch",
+    "build": "rollup -c",
+    "build:watch": "npm run build -- --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kriegslustig/lamport-js.git"
+  },
+  "keywords": [
+    "Lamport",
+    "signature"
+  ],
+  "author": "Luca Nils Schmid <npm@ls7.ch>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kriegslustig/lamport-js/issues"
+  },
+  "homepage": "https://github.com/Kriegslustig/lamport-js#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-jest": "^22.4.3",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-flow": "^6.23.0",
+    "jest": "22.4.3",
+    "rollup": "0.57.1",
+    "rollup-plugin-babel": "^3.0.3"
+  },
+  "browserlist": "last 2 versions"
+}
