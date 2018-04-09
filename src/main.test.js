@@ -85,3 +85,32 @@ describe('lamport.verifySignature', () => {
     expect(result).toBe(false)
   })
 })
+
+describe('lamport.sign', () => {
+  it('sign the SHA-256 of the message', async () => {
+    const { secretKey } = await lamport.generateKeyPair()
+    const message = new Uint8Array([1, 2, 3])
+    const dataSubject = await window.crypto.subtle.digest(
+      'SHA-256',
+      message
+    )
+    const expectedSignature = await lamport.generateSignature(
+      secretKey,
+      dataSubject
+    )
+
+    const signedMessage = await lamport.sign(secretKey, message.buffer)
+
+    const signature = new Uint8Array(signedMessage, 3)
+    expect(signature).toEqual(new Uint8Array(expectedSignature))
+  })
+
+  it('should concatenate the signature and the message', async () => {
+    const { secretKey } = await lamport.generateKeyPair()
+    const message = new Uint8Array([1, 2, 3])
+
+    const result = await lamport.sign(secretKey, message.buffer)
+
+    expect(result.byteLength).toBe(message.length + 256 * 32)
+  })
+})

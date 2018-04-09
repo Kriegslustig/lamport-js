@@ -95,3 +95,15 @@ export const verifySignature = async (
 
   return true
 }
+
+export const sign = async (
+  secretKey: ArrayBuffer,
+  data: ArrayBuffer,
+): Promise<ArrayBuffer> => {
+  const hash = await window.crypto.subtle.digest('SHA-256', data)
+  const signature = await generateSignature(secretKey, hash)
+  const signedMessage = new Uint8Array(data.byteLength + signature.byteLength)
+  signedMessage.set(new Uint8Array(data), 0)
+  signedMessage.set(new Uint8Array(signature), data.byteLength)
+  return signedMessage.buffer
+}

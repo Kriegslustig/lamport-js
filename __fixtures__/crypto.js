@@ -10,7 +10,11 @@ global.crypto = {
       try {
         if (algo !== 'SHA-256') throw new Error('Unsupported algorithm')
         const hash = crypto.createHash('sha256')
-        hash.update(content)
+        if (ArrayBuffer.prototype.isPrototypeOf(content)) {
+          hash.update(new Uint8Array(content))
+        } else {
+          hash.update(content)
+        }
         const digest = hash.digest()
         resolve((new Uint8Array(digest)).buffer)
       } catch (e) {
