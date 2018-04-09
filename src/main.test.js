@@ -17,8 +17,8 @@ describe('lamport.generateKeyPair', () => {
 
   it('should return 2 * 256 * 256 bits long keys', async () => {
     const { secretKey, publicKey } = await lamport.generateKeyPair()
-    expect(secretKey.byteLength).toBe(2 * 32 * 32)
-    expect(publicKey.byteLength).toBe(2 * 32 * 32)
+    expect(secretKey.byteLength).toBe(2 * 32 * 256)
+    expect(publicKey.byteLength).toBe(2 * 32 * 256)
   })
 
   it('should generate a key where a SHA-256 hash of the first 256 bits of the secret key results in the first 256 bits of the public key', async () => {
@@ -41,9 +41,9 @@ describe('lamport.generateSignature', () => {
     const signature = await lamport.generateSignature(secretKey, payload.buffer)
 
     expect(signature).toBeInstanceOf(ArrayBuffer)
-    expect(signature.byteLength).toBe(32 * 32 * 8)
+    expect(signature.byteLength).toBe(32 * 256)
     expect(new Uint8Array(signature, 0, 32)).toEqual(new Uint8Array(secretKey, 0, 32))
-    expect(new Uint8Array(signature, 32, 32)).toEqual(new Uint8Array(secretKey, (32 * 32) + 32, 32))
+    expect(new Uint8Array(signature, 32, 32)).toEqual(new Uint8Array(secretKey, (32 * 256) + 32, 32))
   })
 
   it('should throw if the data is not 256 bits long', async () => {
