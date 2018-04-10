@@ -1,7 +1,11 @@
 // @flow
 
-export const arrayBufferBitIterable = function * (data: ArrayBuffer): Iterable<number> {
-  const uint8Data = new Uint8Array(data)
+export const arrayBufferBitIterable = function * (
+  data: ArrayBuffer | Uint8Array
+): Iterable<number> {
+  const uint8Data: Uint8Array = data instanceof Uint8Array
+    ? data
+    : new Uint8Array(data)
 
   for (let offset = 0; offset < data.byteLength * 8; ++offset) {
     const bitOffset = offset % 8

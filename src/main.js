@@ -9,6 +9,7 @@ const WORD_LENGTH_BYTES = 32
 const MESSAGE_LENGTH_BITS = 256
 const KEY_PART_LENGTH_BYTES = WORD_LENGTH_BYTES * MESSAGE_LENGTH_BITS
 const KEY_LENGTH_BYTES = 2 * KEY_PART_LENGTH_BYTES
+const SIGNATURE_LENGTH_BYTES = MESSAGE_LENGTH_BITS * WORD_LENGTH_BYTES
 
 type KeyPair = {
   secretKey: ArrayBuffer,
@@ -66,10 +67,12 @@ export const generateSignature = (
 
 export const verifySignature = async (
   publicKey: ArrayBuffer,
-  data: ArrayBuffer,
-  signature: ArrayBuffer,
+  data: ArrayBuffer | Uint8Array,
+  signature: ArrayBuffer | Uint8Array,
 ): Promise<boolean> => {
-  const uint8Signature = new Uint8Array(signature)
+  const uint8Signature = signature instanceof Uint8Array
+    ? signature
+    : new Uint8Array(signature)
   const uint8PublicKey = new Uint8Array(publicKey)
   const p0 = uint8PublicKey.subarray(0, KEY_PART_LENGTH_BYTES)
   const p1 = uint8PublicKey.subarray(KEY_PART_LENGTH_BYTES)
@@ -106,4 +109,15 @@ export const sign = async (
   signedMessage.set(new Uint8Array(data), 0)
   signedMessage.set(new Uint8Array(signature), data.byteLength)
   return signedMessage.buffer
+}
+
+export const verify = async (
+  publicKey: ArrayBuffer,
+  signedMessage: ArrayBuffer,
+): Promise<boolean> => {
+  const signatureOffset = signedMessage.byteLength - SIGNATURE_LENGTH_BYTES
+  const signature = new Uint8Array(signedMessage, signatureOffset)
+  const data = new DataView(signedMessage, 0, signatureOffset)
+  const hash = await window.crypto.subtle.digest('SHA-256', data)
+  return verifySignature(publicKey, hash, signature)
 }

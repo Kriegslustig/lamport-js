@@ -114,3 +114,27 @@ describe('lamport.sign', () => {
     expect(result.byteLength).toBe(message.length + 256 * 32)
   })
 })
+
+describe('lamport.verify', () => {
+  it('should return true if a message was signed with the secret key of a certain public key', async () => {
+    const { publicKey, secretKey } = await lamport.generateKeyPair()
+    const message = new Uint8Array([1, 2, 3])
+    const signedMessage = await lamport.sign(secretKey, message.buffer)
+
+    const result = await lamport.verify(publicKey, signedMessage)
+
+    expect(result).toBe(true)
+  })
+
+  it('should return false if a given message was not signed with the secret key of the given public key', async () => {
+    const { publicKey, secretKey } = await lamport.generateKeyPair()
+    const message = new Uint8Array([1, 2, 3])
+    const signedMessage = await lamport.sign(secretKey, message.buffer)
+    const uint8Message = new Uint8Array(signedMessage)
+    uint8Message[1] = 5
+
+    const result = await lamport.verify(publicKey, signedMessage)
+
+    expect(result).toBe(false)
+  })
+})
